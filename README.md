@@ -1,2 +1,2 @@
-# DORM-Handler-JS
+# DORM-Handler-JS (BETA)
 Handling DORM API with JavaScript

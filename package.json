@@ -1,25 +1,42 @@
 {
-  "name": "dorm-handler-js",
-  "version": "0.0.1",
-  "description": "Handling DORM API with JavaScript",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/karolisdailidonis/DORM-Handler-JS.git"
-  },
-  "dependencies": {
-    "axios": "^0.27.2"
-  },
-  "keywords": [
-    "DORM"
-  ],
-  "author": "karolisdailidonis",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/karolisdailidonis/DORM-Handler-JS/issues"
-  },
-  "homepage": "https://github.com/karolisdailidonis/DORM-Handler-JS#readme"
+	"name": "dorm-handler-js",
+	"version": "0.0.1",
+	"description": "Handling DORM API with JavaScript",
+	"main": "./dist/index.umd.js",
+	"module": "./dist/index.es.js",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"import": "./dist/index.es.js",
+			"require": "./dist/index.umd.js"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/karolisdailidonis/DORM-Handler-JS.git"
+	},
+	"dependencies": {
+		"axios": "^0.27.2"
+	},
+	"devDependencies": {
+		"prettier": "^2.8.1",
+		"vite": "^3.0.7"
+	},
+	"keywords": [
+		"DORM"
+	],
+	"author": "karolisdailidonis",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/karolisdailidonis/DORM-Handler-JS/issues"
+	},
+	"homepage": "https://github.com/karolisdailidonis/DORM-Handler-JS#readme"
 }

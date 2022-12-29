@@ -1,0 +1,7 @@
+{
+  "src/index.js": {
+    "file": "index.umd.js",
+    "src": "src/index.js",
+    "isEntry": true
+  }
+}
