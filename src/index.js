@@ -1,9 +1,15 @@
 import axios from 'axios';
 
 class DORM {
-	schema = '0.0.6';
+	schema = '0.0.8';
 	token = null;
 	apiURL = null;
+
+	axiosConfig = {
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	};
 
 	jobs = [];
 
@@ -92,6 +98,32 @@ class DORM {
 		return this;
 	}
 
+	selectRow(response, table, emptyArray = false) {
+		try {
+			return response.data.body[table].rows[0];
+		} catch (error) {
+			if (emptyArray) {return [];}
+			return error;	
+		}
+	}
+
+	selectRows(response, table, emptyArray = false) {
+		try {
+			return response.data.body[table].rows;
+		} catch (error) {
+			if (emptyArray) {return [];}
+			return error;
+		}
+	}
+
+	hasError() {
+		// TODO:
+	}
+
+	selectErrors() {
+		// TODO:
+	}
+
 	send() {
 		return axios
 			.post(
@@ -101,9 +133,7 @@ class DORM {
 					token: this.token,
 					jobs: this.jobs,
 				},
-				{
-					headers: { 'Content-Type': 'application/json' },
-				}
+				this.axiosConfig
 			)
 			.catch((exception) => {
 				console.log(exception);

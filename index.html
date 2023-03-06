@@ -1,0 +1,11 @@
+<h1>DORM</h1>
+
+<script type="module">
+import {DORM} from './src/index.js'
+
+const dorm = new DORM();
+dorm.setApiURL("<dorm-path>");
+
+dorm.send().then((res) => console.log(res));
+
+</script>

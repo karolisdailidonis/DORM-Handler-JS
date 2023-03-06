@@ -1,11 +1,11 @@
 {
 	"name": "dorm-handler-js",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"description": "Handling DORM API with JavaScript",
 	"main": "./dist/index.umd.js",
 	"module": "./dist/index.es.js",
 	"files": [
-		"dist"
+		"dist/*", "src/*", "README.md", "LICENSE"
 	],
 	"exports": {
 		".": {

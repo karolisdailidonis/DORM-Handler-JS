@@ -1381,9 +1381,14 @@ var __publicField = (obj, key, value) => {
   const axios = /* @__PURE__ */ getDefaultExportFromCjs(axios$3.exports);
   class DORM {
     constructor() {
-      __publicField(this, "schema", "0.0.6");
+      __publicField(this, "schema", "0.0.8");
       __publicField(this, "token", null);
       __publicField(this, "apiURL", null);
+      __publicField(this, "axiosConfig", {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
       __publicField(this, "jobs", []);
     }
     addReadJob({
@@ -1452,6 +1457,30 @@ var __publicField = (obj, key, value) => {
       this.token = token;
       return this;
     }
+    selectRow(response, table, emptyArray = false) {
+      try {
+        return response.data.body[table].rows[0];
+      } catch (error) {
+        if (emptyArray) {
+          return [];
+        }
+        return error;
+      }
+    }
+    selectRows(response, table, emptyArray = false) {
+      try {
+        return response.data.body[table].rows;
+      } catch (error) {
+        if (emptyArray) {
+          return [];
+        }
+        return error;
+      }
+    }
+    hasError() {
+    }
+    selectErrors() {
+    }
     send() {
       return axios.post(
         this.apiURL,
@@ -1460,9 +1489,7 @@ var __publicField = (obj, key, value) => {
           token: this.token,
           jobs: this.jobs
         },
-        {
-          headers: { "Content-Type": "application/json" }
-        }
+        this.axiosConfig
       ).catch((exception) => {
         console.log(exception);
         result = { data: { errors: [exception.message] } };
