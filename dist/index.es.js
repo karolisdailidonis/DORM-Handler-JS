@@ -43,13 +43,13 @@ function isBuffer(val) {
 }
 var isArrayBuffer = kindOfTest("ArrayBuffer");
 function isArrayBufferView(val) {
-  var result2;
+  var result;
   if (typeof ArrayBuffer !== "undefined" && ArrayBuffer.isView) {
-    result2 = ArrayBuffer.isView(val);
+    result = ArrayBuffer.isView(val);
   } else {
-    result2 = val && val.buffer && isArrayBuffer(val.buffer);
+    result = val && val.buffer && isArrayBuffer(val.buffer);
   }
-  return result2;
+  return result;
 }
 function isString(val) {
   return typeof val === "string";
@@ -111,22 +111,22 @@ function forEach(obj, fn) {
   }
 }
 function merge() {
-  var result2 = {};
+  var result = {};
   function assignValue(val, key) {
-    if (isPlainObject(result2[key]) && isPlainObject(val)) {
-      result2[key] = merge(result2[key], val);
+    if (isPlainObject(result[key]) && isPlainObject(val)) {
+      result[key] = merge(result[key], val);
     } else if (isPlainObject(val)) {
-      result2[key] = merge({}, val);
+      result[key] = merge({}, val);
     } else if (isArray(val)) {
-      result2[key] = val.slice();
+      result[key] = val.slice();
     } else {
-      result2[key] = val;
+      result[key] = val;
     }
   }
   for (var i = 0, l = arguments.length; i < l; i++) {
     forEach(arguments[i], assignValue);
   }
-  return result2;
+  return result;
 }
 function extend(a, b, thisArg) {
   forEach(b, function assignValue(val, key) {
@@ -1103,9 +1103,9 @@ function assertOptions(options, schema, allowUnknown) {
     var validator2 = schema[opt];
     if (validator2) {
       var value = options[opt];
-      var result2 = value === void 0 || validator2(value, opt, options);
-      if (result2 !== true) {
-        throw new AxiosError("option " + opt + " must be " + result2, AxiosError.ERR_BAD_OPTION_VALUE);
+      var result = value === void 0 || validator2(value, opt, options);
+      if (result !== true) {
+        throw new AxiosError("option " + opt + " must be " + result, AxiosError.ERR_BAD_OPTION_VALUE);
       }
       continue;
     }
@@ -1380,6 +1380,7 @@ class DORM {
     __publicField(this, "schema", "0.0.8");
     __publicField(this, "token", null);
     __publicField(this, "apiURL", null);
+    __publicField(this, "axiosInstance", axios);
     __publicField(this, "axiosConfig", {
       headers: {
         "Content-Type": "application/json"
@@ -1422,27 +1423,27 @@ class DORM {
     return this;
   }
   addInsertJob({ from, values, before = null }) {
-    const table = {
+    const job = {
       requestJob: "insert",
       from,
       values
     };
     if (before != null) {
-      table["before"] = before;
+      job["before"] = before;
     }
-    this.tables.push(table);
+    this.jobs.push(job);
     return this;
   }
   addUpdateJob({ from, values, where = null }) {
-    const table = {
+    const job = {
       requestJob: "update",
       from,
       values
     };
     if (where != null) {
-      table["where"] = where;
+      job["where"] = where;
     }
-    this.tables.push(table);
+    this.jobs.push(job);
     return this;
   }
   setApiURL(url) {
@@ -1478,7 +1479,7 @@ class DORM {
   selectErrors() {
   }
   send() {
-    return axios.post(
+    return this.axiosInstance.post(
       this.apiURL,
       {
         schema: this.schema,
@@ -1486,10 +1487,7 @@ class DORM {
         jobs: this.jobs
       },
       this.axiosConfig
-    ).catch((exception) => {
-      console.log(exception);
-      result = { data: { errors: [exception.message] } };
-    });
+    );
   }
 }
 export {

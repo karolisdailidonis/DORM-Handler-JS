@@ -5,6 +5,8 @@ class DORM {
 	token = null;
 	apiURL = null;
 
+	axiosInstance = axios;
+
 	axiosConfig = {
 		headers: {
 			'Content-Type': 'application/json',
@@ -56,33 +58,33 @@ class DORM {
 	}
 
 	addInsertJob({ from, values, before = null }) {
-		const table = {
+		const job = {
 			requestJob: 'insert',
 			from: from,
 			values: values,
 		};
 
 		if (before != null) {
-			table['before'] = before;
+			job['before'] = before;
 		}
 
-		this.tables.push(table);
+		this.jobs.push(job);
 
 		return this;
 	}
 
 	addUpdateJob({ from, values, where = null }) {
-		const table = {
+		const job = {
 			requestJob: 'update',
 			from: from,
 			values: values,
 		};
 
 		if (where != null) {
-			table['where'] = where;
+			job['where'] = where;
 		}
 
-		this.tables.push(table);
+		this.jobs.push(job);
 
 		return this;
 	}
@@ -124,21 +126,21 @@ class DORM {
 		// TODO:
 	}
 
+	// TODO: set jobs to null
 	send() {
-		return axios
-			.post(
-				this.apiURL,
-				{
-					schema: this.schema,
-					token: this.token,
-					jobs: this.jobs,
-				},
-				this.axiosConfig
-			)
-			.catch((exception) => {
-				console.log(exception);
-				result = { data: { errors: [exception.message] } };
-			});
+		return this.axiosInstance.post(
+			this.apiURL,
+			{
+				schema: this.schema,
+				token: this.token,
+				jobs: this.jobs,
+			},
+			this.axiosConfig
+		);
+			// .catch((exception) => {
+			// 	console.log(exception);
+			// 	result = { data: { errors: [exception.message] } };
+			// });
 	}
 }
 
