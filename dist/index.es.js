@@ -1377,9 +1377,10 @@ axios$2.exports.default = axios$1;
 const axios = /* @__PURE__ */ getDefaultExportFromCjs(axios$3.exports);
 class DORM {
   constructor() {
-    __publicField(this, "schema", "0.0.8");
+    __publicField(this, "schema", "0.1.3");
     __publicField(this, "token", null);
     __publicField(this, "apiURL", null);
+    __publicField(this, "json", null);
     __publicField(this, "axiosInstance", axios);
     __publicField(this, "axiosConfig", {
       headers: {
@@ -1424,7 +1425,7 @@ class DORM {
   }
   addInsertJob({ from, values, before = null }) {
     const job = {
-      requestJob: "insert",
+      job: "insert",
       from,
       values
     };
@@ -1436,7 +1437,7 @@ class DORM {
   }
   addUpdateJob({ from, values, where = null }) {
     const job = {
-      requestJob: "update",
+      job: "update",
       from,
       values
     };
@@ -1474,9 +1475,17 @@ class DORM {
       return error;
     }
   }
-  hasError() {
+  hasError(response) {
+    if (response.data.errors.length > 0)
+      return true;
+    return false;
   }
-  selectErrors() {
+  selectErrors(response, table) {
+    try {
+      return response.data.errors;
+    } catch (error) {
+      return [];
+    }
   }
   send() {
     return this.axiosInstance.post(
@@ -1484,6 +1493,7 @@ class DORM {
       {
         schema: this.schema,
         token: this.token,
+        json: this.json,
         jobs: this.jobs
       },
       this.axiosConfig

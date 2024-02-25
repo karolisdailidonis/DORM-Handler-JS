@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 class DORM {
-	schema = '0.0.8';
+	schema = '0.1.3';
 	token = null;
 	apiURL = null;
+	json = null;
 
 	axiosInstance = axios;
 
@@ -59,7 +60,7 @@ class DORM {
 
 	addInsertJob({ from, values, before = null }) {
 		const job = {
-			requestJob: 'insert',
+			job: 'insert',
 			from: from,
 			values: values,
 		};
@@ -75,7 +76,7 @@ class DORM {
 
 	addUpdateJob({ from, values, where = null }) {
 		const job = {
-			requestJob: 'update',
+			job: 'update',
 			from: from,
 			values: values,
 		};
@@ -91,7 +92,6 @@ class DORM {
 
 	setApiURL(url) {
 		this.apiURL = url;
-
 		return this;
 	}
 
@@ -117,13 +117,18 @@ class DORM {
 			return error;
 		}
 	}
-
-	hasError() {
-		// TODO:
+	
+	hasError(response) {
+		if (response.data.errors.length > 0) return true;
+		return false;
 	}
-
-	selectErrors() {
-		// TODO:
+	
+	selectErrors(response, table) {
+		try {
+			return response.data.errors;
+		} catch (error) {
+			return []
+		}
 	}
 
 	// TODO: set jobs to null
@@ -133,6 +138,7 @@ class DORM {
 			{
 				schema: this.schema,
 				token: this.token,
+				json: this.json,
 				jobs: this.jobs,
 			},
 			this.axiosConfig

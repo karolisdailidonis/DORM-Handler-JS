@@ -23,7 +23,7 @@ dorm.addReadJob({"...."});
 
 dorm.send();
 
-dorm.thend((response)) => {
+dorm.then((response)) => {
 	console.log(response);
 }
 ```
